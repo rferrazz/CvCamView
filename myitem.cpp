@@ -3,13 +3,10 @@
 #include <QtDeclarative/qdeclarative.h>
 
 MyItem::MyItem(QDeclarativeItem *parent):
-    QDeclarativeItem(parent)
+    QDeclarativeItem(parent), camera(0)
 {
-    // By default, QDeclarativeItem does not draw anything. If you subclass
-    // QDeclarativeItem to create a visual item, you will need to uncomment the
-    // following line:
-    
     setFlag(ItemHasNoContents, false);
+    camThread = new camThread(camera);
 }
 
 MyItem::~MyItem()

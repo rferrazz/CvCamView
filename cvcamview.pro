@@ -12,11 +12,13 @@ uri = com.ferrazz.qmlcomponents
 # Input
 SOURCES += \
     cvcamview_plugin.cpp \
-    myitem.cpp
+    myitem.cpp \
+    camthread.cpp
 
 HEADERS += \
     cvcamview_plugin.h \
-    myitem.h
+    myitem.h \
+    camthread.h
 
 OTHER_FILES = qmldir
 

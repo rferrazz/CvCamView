@@ -1,5 +1,4 @@
 TEMPLATE = lib
-#TEMPLATE = app
 TARGET = CvCamView
 QT += declarative
 CONFIG += qt plugin
@@ -13,11 +12,13 @@ uri = opencv.components
 # Input
 SOURCES += \
     cvcamview_plugin.cpp \
-    CvCamView.cpp
+    cvcamview.cpp \
+    cvcamresolution.cpp
 
 HEADERS += \
     cvcamview_plugin.h \
-    CvCamView.h
+    cvcamview.h \
+    cvcamresolution.h
 
 OTHER_FILES = qmldir \
     COPYING

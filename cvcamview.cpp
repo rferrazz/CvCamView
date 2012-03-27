@@ -17,28 +17,34 @@ This file is part of CvCamView.
     along with CvCamView.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#include "CvCamView.h"
+#include "cvcamview.h"
 
 #include <QtDeclarative/qdeclarative.h>
 #include <QTimer>
 
 CvCamView::CvCamView(QDeclarativeItem *parent):
-    QDeclarativeItem(parent), _camera(0)
+    QDeclarativeItem(parent), _camera(0), _resolution(new CvCamResolution())
 {
     setFlag(ItemHasNoContents, false);
+    capture = NULL;
     label = new QLabel();
     widget = new QGraphicsProxyWidget(this);
     widget->setWidget(label);
-    setupCamera();
-    QTimer *timer = new QTimer(this);
+    timer = new QTimer(this);
     QObject::connect(timer, SIGNAL(timeout()), this, SLOT(queryFrame()));
     timer->start(40);
+    setupCamera();
 }
 
 void CvCamView::setCamera(int camera){
     this->_camera = camera;
     setupCamera();
     emit cameraChanged();
+}
+
+void CvCamView::setResolution(CvCamResolution *resolution){
+    _resolution = resolution;
+    setupCamera();
 }
 
 void CvCamView::setWidth(int width){
@@ -52,9 +58,13 @@ void CvCamView::setHeight(int height){
 }
 
 void CvCamView::setupCamera(){
-    cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, 800);
-    cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, 600);
+    timer->blockSignals(true);
+    if(capture != NULL)
+        cvReleaseCapture(&capture);
     capture = cvCreateCameraCapture(_camera);
+    cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, _resolution->width());
+    cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, _resolution->height());
+    timer->blockSignals(false);
 }
 
 void CvCamView::queryFrame(){
@@ -66,6 +76,7 @@ void CvCamView::queryFrame(){
 
 CvCamView::~CvCamView()
 {
+    cvReleaseCapture(&capture);
 }
 
 QImage CvCamView::ipl2Qimg(IplImage* iplImg){

@@ -17,18 +17,36 @@ This file is part of CvCamView.
     along with CvCamView.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#include "cvcamview_plugin.h"
-#include "cvcamview.h"
-#include "cvcamresolution.h"
+#ifndef CVCAMRESOLUTION_H
+#define CVCAMRESOLUTION_H
 
-#include <QApplication>
-#include <QtDeclarative/qdeclarative.h>
+#include <QObject>
 
-void CvCamViewPlugin::registerTypes(const char *uri)
+class CvCamResolution : public QObject
 {
-    // @uri opencv.components
-    qmlRegisterType<CvCamResolution>(uri, 1, 0, "CvCamResolution");
-    qmlRegisterType<CvCamView>(uri, 1, 0, "CvCamView");
-}
+    Q_OBJECT
+    Q_DISABLE_COPY(CvCamResolution)
+    Q_PROPERTY(int width READ width WRITE setWidth)
+    Q_PROPERTY(int height READ height WRITE setHeight)
 
-Q_EXPORT_PLUGIN2(CvCamView, CvCamViewPlugin)
+public:
+    CvCamResolution(QObject *parent = 0);
+    ~CvCamResolution();
+    
+    //SET methods
+    void setWidth(int width);
+    void setHeight(int height);
+
+    //GET methods
+    int width() const {return _width;}
+    int height() const {return _height;}
+
+private:
+    int _width;
+    int _height;
+    
+};
+
+//QML_DECLARE_TYPE(CvCamResolution)
+
+#endif // CVCAMRESOLUTION_H

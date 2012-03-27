@@ -17,33 +17,35 @@ This file is part of CvCamView.
     along with CvCamView.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef MYITEM_H
-#define MYITEM_H
+#ifndef CVCAMVIEW_H
+#define CVCAMVIEW_H
 
 #include <QtDeclarative/QDeclarativeItem>
 #include <QGraphicsProxyWidget>
 #include <QLabel>
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
+#include "cvcamresolution.h"
 
 class CvCamView : public QDeclarativeItem
 {
     Q_OBJECT
-    Q_DISABLE_COPY(MyItem)
+    Q_DISABLE_COPY(CvCamView)
     Q_PROPERTY(IplImage* iplImage READ iplImage NOTIFY newFrame)
     Q_PROPERTY(QImage qImage READ qImage NOTIFY newFrame)
     Q_PROPERTY(int camera READ camera WRITE setCamera NOTIFY cameraChanged)
-    Q_PROPERTY(
+    Q_PROPERTY(CvCamResolution *resolution READ resolution WRITE setResolution)
     Q_PROPERTY(int width READ width WRITE setWidth NOTIFY widthChanged)
     Q_PROPERTY(int height READ height WRITE setHeight NOTIFY heightChanged)
     
 public:
-    MyItem(QDeclarativeItem *parent = 0);
-    ~MyItem();
+    CvCamView(QDeclarativeItem *parent = 0);
+    ~CvCamView();
     static QImage ipl2Qimg(IplImage* iplImg);
 
     //SET methods
     void setCamera(int camera);
+    void setResolution(CvCamResolution *resolution);
     void setWidth(int width);
     void setHeight(int height);
 
@@ -51,6 +53,7 @@ public:
     IplImage* iplImage() const {return _iplImage;}
     QImage qImage() const {return _qImage;}
     int camera() const {return _camera;}
+    CvCamResolution *resolution() const {return _resolution;}
     int width() const {return label->width();}
     int height() const {return label->height();}
 
@@ -60,22 +63,22 @@ signals:
     void widthChanged();
     void heightChanged();
 
-protected:
+private:
     void setupCamera();
     IplImage* _iplImage;
     QImage _qImage;
     int _camera;
-
-private:
+    CvCamResolution *_resolution;
     QLabel* label;
     QGraphicsProxyWidget* widget;
     CvCapture *capture;
+    QTimer *timer;
 
 private slots:
     void queryFrame();
 };
 
-QML_DECLARE_TYPE(MyItem)
+QML_DECLARE_TYPE(CvCamView)
 
-#endif // MYITEM_H
+#endif // CVCAMVIEW_H
 

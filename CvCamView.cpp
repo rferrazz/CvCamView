@@ -1,9 +1,28 @@
-#include "myitem.h"
+/*
+Copyright (C) 2012 Riccardo Ferrazzo <f.riccardo87@gmail.com>
+
+This file is part of CvCamView.
+
+    CvCamView is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    WebDomo is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with CvCamView.  If not, see <http://www.gnu.org/licenses/>
+*/
+
+#include "CvCamView.h"
 
 #include <QtDeclarative/qdeclarative.h>
 #include <QTimer>
 
-MyItem::MyItem(QDeclarativeItem *parent):
+CvCamView::CvCamView(QDeclarativeItem *parent):
     QDeclarativeItem(parent), _camera(0)
 {
     setFlag(ItemHasNoContents, false);
@@ -16,29 +35,40 @@ MyItem::MyItem(QDeclarativeItem *parent):
     timer->start(40);
 }
 
-void MyItem::setCamera(int camera){
+void CvCamView::setCamera(int camera){
     this->_camera = camera;
     setupCamera();
     emit cameraChanged();
 }
 
-void MyItem::setupCamera(){
+void CvCamView::setWidth(int width){
+    label->setFixedWidth(width);
+    emit widthChanged();
+}
+
+void CvCamView::setHeight(int height){
+    label->setFixedHeight(height);
+    emit heightChanged();
+}
+
+void CvCamView::setupCamera(){
+    cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, 800);
+    cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, 600);
     capture = cvCreateCameraCapture(_camera);
 }
 
-void MyItem::queryFrame(){
+void CvCamView::queryFrame(){
     _iplImage = cvQueryFrame(capture);
-    cvFlip(_iplImage,_iplImage, 1);
-    _qImage = MyItem::ipl2Qimg(_iplImage);
+    _qImage = CvCamView::ipl2Qimg(_iplImage);
     label->setPixmap(QPixmap::fromImage(_qImage.scaledToHeight(label->height())));
     emit newFrame();
 }
 
-MyItem::~MyItem()
+CvCamView::~CvCamView()
 {
 }
 
-QImage MyItem::ipl2Qimg(IplImage* iplImg){
+QImage CvCamView::ipl2Qimg(IplImage* iplImg){
     int h = iplImg->height;
     int w = iplImg->width;
     int channels = iplImg->nChannels;

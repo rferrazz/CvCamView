@@ -8,18 +8,19 @@ unix: CONFIG += link_pkgconfig
 unix: PKGCONFIG += opencv
 
 TARGET = $$qtLibraryTarget($$TARGET)
-uri = com.ferrazz.qmlcomponents
+uri = opencv.components
 
 # Input
 SOURCES += \
     cvcamview_plugin.cpp \
-    myitem.cpp
+    CvCamView.cpp
 
 HEADERS += \
     cvcamview_plugin.h \
-    myitem.h
+    CvCamView.h
 
-OTHER_FILES = qmldir
+OTHER_FILES = qmldir \
+    COPYING
 
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
     copy_qmldir.target = $$OUT_PWD/qmldir

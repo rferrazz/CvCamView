@@ -33,5 +33,5 @@ Here is an example of CvCamView in action (note that consumer is not provided):
 
 Limitations
 ------------
-It have some speed limitations due to the usage of a QGraphicsProxyWidget wich is
-not the best choice in terms of overall performance
+It have some speed limitations due to the use of a QGraphicsProxyWidget to display images 
+in a QLabel wich is not the best choice in terms of overall performance

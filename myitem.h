@@ -2,8 +2,10 @@
 #define MYITEM_H
 
 #include <QtDeclarative/QDeclarativeItem>
-#include "camthread.h"
+#include <QGraphicsProxyWidget>
+#include <QLabel>
 #include <opencv/cv.h>
+#include <opencv/highgui.h>
 
 class MyItem : public QDeclarativeItem
 {
@@ -16,14 +18,33 @@ class MyItem : public QDeclarativeItem
 public:
     MyItem(QDeclarativeItem *parent = 0);
     ~MyItem();
+    static QImage ipl2Qimg(IplImage* iplImg);
+
+    //SET methods
+    void setCamera(int camera);
+
+    //GET methods
+    IplImage* iplImage() const {return _iplImage;}
+    QImage qImage() const {return _qImage;}
+    int camera() const {return _camera;}
+
+signals:
+    void newFrame();
+    void cameraChanged();
 
 protected:
-    IplImage* iplImage;
-    QImage qImage;
-    int camera;
+    void setupCamera();
+    IplImage* _iplImage;
+    QImage _qImage;
+    int _camera;
 
 private:
-    CamThread* camThread;
+    QLabel* label;
+    QGraphicsProxyWidget* widget;
+    CvCapture *capture;
+
+private slots:
+    void queryFrame();
 };
 
 QML_DECLARE_TYPE(MyItem)

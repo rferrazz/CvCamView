@@ -1,4 +1,5 @@
 TEMPLATE = lib
+#TEMPLATE = app
 TARGET = CvCamView
 QT += declarative
 CONFIG += qt plugin
@@ -12,13 +13,11 @@ uri = com.ferrazz.qmlcomponents
 # Input
 SOURCES += \
     cvcamview_plugin.cpp \
-    myitem.cpp \
-    camthread.cpp
+    myitem.cpp
 
 HEADERS += \
     cvcamview_plugin.h \
-    myitem.h \
-    camthread.h
+    myitem.h
 
 OTHER_FILES = qmldir
 
@@ -43,4 +42,3 @@ symbian {
     target.path = $$installPath
     INSTALLS += target qmldir
 }
-

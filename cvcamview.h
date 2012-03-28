@@ -66,14 +66,16 @@ signals:
     void cameraStateChanged();
 
 private:
-    void setupCamera();
     IplImage* _iplImage;
     QImage _qImage;
     int _camera;
-    CameraState _cameraState;
     CvCamResolution *_resolution;
+    CameraState _cameraState;
     CvCapture *capture;
     QTimer *timer;
+    void setupCamera();
+    void decreaseCameraState();
+    void increaseCameraState();
 
 private slots:
     void queryFrame();

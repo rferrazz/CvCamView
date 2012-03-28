@@ -23,7 +23,7 @@ This file is part of CvCamView.
 #include <QTimer>
 
 CvCamView::CvCamView(QDeclarativeItem *parent):
-    QDeclarativeItem(parent), _camera(0), _resolution(new CvCamResolution())
+    QDeclarativeItem(parent), _camera(0), _resolution(new CvCamResolution()), _cameraState(UnloadedState)
 {
     setFlag(ItemHasNoContents, false);
     capture = NULL;
@@ -48,14 +48,46 @@ void CvCamView::setResolution(CvCamResolution *resolution){
     setupCamera();
 }
 
-void CvCamView::setupCamera(){
-    timer->blockSignals(true);
-    if(capture != NULL)
+void CvCamView::setCameraState(CameraState state){
+    while(state < _cameraState)
+        decreaseCameraState();
+    while(state > _cameraState)
+        increaseCameraState();
+}
+
+void CvCamView::increaseCameraState(){
+    int state = ((int)_cameraState)+1;
+    switch(state){
+    case LoadedState:
+        capture = cvCreateCameraCapture(_camera);
+        cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, _resolution->width());
+        cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, _resolution->height());
+        break;
+    case ActiveState:
+        timer->blockSignals(false);
+        break;
+    }
+    _cameraState = (CameraState)state;
+    emit cameraStateChanged();
+}
+
+void CvCamView::decreaseCameraState(){
+    int state = ((int)_cameraState)-1;
+    switch(state){
+    case LoadedState:
+        timer->blockSignals(true);
+        break;
+    case UnloadedState:
         cvReleaseCapture(&capture);
-    capture = cvCreateCameraCapture(_camera);
-    cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, _resolution->width());
-    cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, _resolution->height());
-    timer->blockSignals(false);
+        break;
+    }
+    _cameraState = (CameraState)state;
+    emit cameraStateChanged();
+}
+
+void CvCamView::setupCamera(){
+    setCameraState(UnloadedState);
+    setCameraState(ActiveState);
 }
 
 void CvCamView::queryFrame(){

@@ -32,7 +32,9 @@ class CvCamView : public QDeclarativeItem
     Q_OBJECT
     Q_DISABLE_COPY(CvCamView)
     Q_ENUMS(CameraState)
-    Q_PROPERTY(IplImage* iplImage READ iplImage NOTIFY newFrame)
+    Q_PROPERTY(int iplWidth READ iplWidth)
+    Q_PROPERTY(int iplHeight READ iplHeight)
+    Q_PROPERTY(QByteArray iplData READ iplData NOTIFY newFrame)
     Q_PROPERTY(QImage qImage READ qImage NOTIFY newFrame)
     Q_PROPERTY(int camera READ camera WRITE setCamera NOTIFY cameraChanged)
     Q_PROPERTY(CvCamResolution *resolution READ resolution WRITE setResolution)
@@ -54,7 +56,9 @@ public:
     void setCameraState(CameraState state);
 
     //GET methods
-    IplImage* iplImage() const {return _iplImage;}
+    int iplWidth() const {return _iplImage->width;}
+    int iplHeight() const {return _iplImage->height;}
+    QByteArray iplData() const {return QByteArray(_iplImage->imageData, _iplImage->imageSize);}
     QImage qImage() const {return _qImage;}
     int camera() const {return _camera;}
     CvCamResolution *resolution() const {return _resolution;}

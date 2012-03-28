@@ -27,13 +27,14 @@ CvCamView::CvCamView(QDeclarativeItem *parent):
 {
     setFlag(ItemHasNoContents, false);
     capture = NULL;
-    label = new QLabel();
-    widget = new QGraphicsProxyWidget(this);
-    widget->setWidget(label);
     timer = new QTimer(this);
     QObject::connect(timer, SIGNAL(timeout()), this, SLOT(queryFrame()));
     timer->start(40);
     setupCamera();
+}
+
+void CvCamView::paint(QPainter *painter, const QStyleOptionGraphicsItem *options, QWidget *widget){
+    painter->drawImage(boundingRect(), _qImage, _qImage.rect());
 }
 
 void CvCamView::setCamera(int camera){
@@ -45,16 +46,6 @@ void CvCamView::setCamera(int camera){
 void CvCamView::setResolution(CvCamResolution *resolution){
     _resolution = resolution;
     setupCamera();
-}
-
-void CvCamView::setWidth(int width){
-    label->setFixedWidth(width);
-    emit widthChanged();
-}
-
-void CvCamView::setHeight(int height){
-    label->setFixedHeight(height);
-    emit heightChanged();
 }
 
 void CvCamView::setupCamera(){
@@ -70,7 +61,7 @@ void CvCamView::setupCamera(){
 void CvCamView::queryFrame(){
     _iplImage = cvQueryFrame(capture);
     _qImage = CvCamView::ipl2Qimg(_iplImage);
-    label->setPixmap(QPixmap::fromImage(_qImage.scaledToHeight(label->height())));
+    update();
     emit newFrame();
 }
 

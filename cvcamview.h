@@ -21,7 +21,7 @@ This file is part of CvCamView.
 #define CVCAMVIEW_H
 
 #include <QtDeclarative/QDeclarativeItem>
-#include <QGraphicsProxyWidget>
+#include <QPainter>
 #include <QLabel>
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
@@ -31,46 +31,47 @@ class CvCamView : public QDeclarativeItem
 {
     Q_OBJECT
     Q_DISABLE_COPY(CvCamView)
+    Q_ENUMS(CameraState)
     Q_PROPERTY(IplImage* iplImage READ iplImage NOTIFY newFrame)
     Q_PROPERTY(QImage qImage READ qImage NOTIFY newFrame)
     Q_PROPERTY(int camera READ camera WRITE setCamera NOTIFY cameraChanged)
     Q_PROPERTY(CvCamResolution *resolution READ resolution WRITE setResolution)
-    Q_PROPERTY(int width READ width WRITE setWidth NOTIFY widthChanged)
-    Q_PROPERTY(int height READ height WRITE setHeight NOTIFY heightChanged)
+    //TODO: mettere a posto sti stati
+    Q_PROPERTY(CameraState cameraState READ cameraState WRITE setCameraState NOTIFY cameraStateChanged)
     
 public:
     CvCamView(QDeclarativeItem *parent = 0);
     ~CvCamView();
     static QImage ipl2Qimg(IplImage* iplImg);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *options, QWidget *widget);
+
+    //enum
+    enum CameraState {UnloadedState, LoadedState, ActiveState};
 
     //SET methods
     void setCamera(int camera);
     void setResolution(CvCamResolution *resolution);
-    void setWidth(int width);
-    void setHeight(int height);
+    void setCameraState(CameraState state);
 
     //GET methods
     IplImage* iplImage() const {return _iplImage;}
     QImage qImage() const {return _qImage;}
     int camera() const {return _camera;}
     CvCamResolution *resolution() const {return _resolution;}
-    int width() const {return label->width();}
-    int height() const {return label->height();}
+    CameraState cameraState() const {return _cameraState;}
 
 signals:
     void newFrame();
     void cameraChanged();
-    void widthChanged();
-    void heightChanged();
+    void cameraStateChanged();
 
 private:
     void setupCamera();
     IplImage* _iplImage;
     QImage _qImage;
     int _camera;
+    CameraState _cameraState;
     CvCamResolution *_resolution;
-    QLabel* label;
-    QGraphicsProxyWidget* widget;
     CvCapture *capture;
     QTimer *timer;
 

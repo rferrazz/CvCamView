@@ -10,6 +10,7 @@ Features
 You can change camera and resolution at runtime. The widget can be easily resized
 or expanded independently of the resolution
 You can access every frame as an IplImage* or as a QImage
+You can change camera state to one of the following: UnloadedState, LoadedState, ActiveState
 
 UseCase
 ------
@@ -22,6 +23,7 @@ Here is an example of CvCamView in action (note that consumer is not provided):
         width: 800
         height: 600
         camera: 0
+        cameraState: CvCamView.ActiveState //unneeded because this is the default state
         resolution: CvCamResolution {
                         width: 800
                         height: 600
@@ -31,7 +33,3 @@ Here is an example of CvCamView in action (note that consumer is not provided):
             consumer.detectSomething(camView.iplImage);
         }
 
-Limitations
-------------
-It have some speed limitations due to the use of a QGraphicsProxyWidget to display images 
-in a QLabel wich is not the best choice in terms of overall performance

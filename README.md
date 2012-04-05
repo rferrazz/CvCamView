@@ -30,6 +30,14 @@ Here is an example of CvCamView in action (note that consumer is not provided):
                     }
         onNewFrame: {
             console.log("new frame recived");
-            consumer.detectSomething(camView.iplImage);
+            consumer.detectSomething(iplWidth, iplHeight, iplData);
         }
 
+the consumer can use the image in this way:
+
+    void consumer::detectSomething(int width, int height, QByteArray data){
+        IplImage *image = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3);
+        cvSetData(image, data.data(), width*3);
+        ...
+    }
+    

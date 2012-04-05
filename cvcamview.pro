@@ -13,12 +13,14 @@ uri = opencv.components
 SOURCES += \
     cvcamview_plugin.cpp \
     cvcamview.cpp \
-    cvcamresolution.cpp
+    cvcamresolution.cpp \
+    cvhaardetector.cpp
 
 HEADERS += \
     cvcamview_plugin.h \
     cvcamview.h \
-    cvcamresolution.h
+    cvcamresolution.h \
+    cvhaardetector.h
 
 OTHER_FILES = qmldir \
     COPYING \

@@ -38,7 +38,6 @@ class CvCamView : public QDeclarativeItem
     Q_PROPERTY(QImage qImage READ qImage NOTIFY newFrame)
     Q_PROPERTY(int camera READ camera WRITE setCamera NOTIFY cameraChanged)
     Q_PROPERTY(CvCamResolution *resolution READ resolution WRITE setResolution)
-    //TODO: mettere a posto sti stati
     Q_PROPERTY(CameraState cameraState READ cameraState WRITE setCameraState NOTIFY cameraStateChanged)
     
 public:

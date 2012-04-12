@@ -32,6 +32,8 @@ class CvCamResolution : public QObject
 public:
     CvCamResolution(QObject *parent = 0);
     ~CvCamResolution();
+
+    enum haarMethod {};
     
     //SET methods
     void setWidth(int width);

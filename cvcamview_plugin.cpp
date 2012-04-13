@@ -20,6 +20,7 @@ This file is part of CvCamView.
 #include "cvcamview_plugin.h"
 #include "cvcamview.h"
 #include "cvcamresolution.h"
+#include "cvhaardetector.h"
 
 #include <QApplication>
 #include <QtDeclarative/qdeclarative.h>
@@ -29,6 +30,8 @@ void CvCamViewPlugin::registerTypes(const char *uri)
     // @uri opencv.components
     qmlRegisterType<CvCamResolution>(uri, 1, 0, "CvCamResolution");
     qmlRegisterType<CvCamView>(uri, 1, 0, "CvCamView");
+    qmlRegisterType<CvHaarDetector>(uri, 1, 0, "CvHaarDetector");
+
 }
 
 Q_EXPORT_PLUGIN2(CvCamView, CvCamViewPlugin)

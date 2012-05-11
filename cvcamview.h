@@ -23,8 +23,7 @@ This file is part of CvCamView.
 #include <QtDeclarative/QDeclarativeItem>
 #include <QPainter>
 #include <QLabel>
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
+#include <opencv2/opencv.hpp>
 #include "cvcamresolution.h"
 
 class CvCamView : public QDeclarativeItem

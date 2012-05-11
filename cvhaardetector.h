@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QVariantList>
 #include <QRect>
-#include <opencv/cv.h>
+#include <opencv2/opencv.hpp>
 
 class CvHaarDetector : public QObject
 {

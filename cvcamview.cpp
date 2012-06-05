@@ -34,7 +34,11 @@ CvCamView::CvCamView(QDeclarativeItem *parent):
 }
 
 void CvCamView::paint(QPainter *painter, const QStyleOptionGraphicsItem *options, QWidget *widget){
-    painter->drawImage(boundingRect(), _qImage, _qImage.rect());
+    QSize imageSize = _qImage.size();
+    imageSize.scale(boundingRect().width(), boundingRect().height(), Qt::KeepAspectRatio);
+    QRect ImgBoundingRect((boundingRect().width()/2)-(imageSize.width()/2),
+                          (boundingRect().height()/2)-(imageSize.height()/2), imageSize.width(), imageSize.height());
+    painter->drawImage(ImgBoundingRect, _qImage, _qImage.rect());
 }
 
 void CvCamView::setCamera(int camera){

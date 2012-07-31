@@ -43,7 +43,7 @@ void CvHaarDetector::haarDetect(QByteArray imageData, int imageWidth, int imageH
 QVariantList CvHaarDetector::results(){
     QVariantList res;
     for(int i=0; i<_results->total; i++){
-        QMap<QString, QVariant> map;
+        QHash<QString, QVariant> map;
         CvRect *r = (CvRect*)cvGetSeqElem(_results, i);
         map.insert("x", r->x);
         map.insert("y", r->y);
